@@ -1,50 +1,20 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-// Rute Dasar
-Route::get('/hello', function () {
-    return 'Hello, World!';
+Route::get('/', function () {
+    return view('welcome');
 });
 
-// Rute dengan parameter
-Route::get('/user/{id}', function ($id) {
-    return "User ID: " . $id;
-});
-
-// Rute dengan parameter opsional
-Route::get('/user/{name?}', function ($name = 'Guest') {
-    return "Hello, " . $name;
-});
-
-// Rute dengan nama (rute penamaan)
-Route::get('/profile', function () {
-    return 'This is the profile page.';
-})->name('profile');
-
-// Menggunakan rute bernama untuk pengalihan 
-Route::get('/redirect-to-profile', function () {
-    return redirect()->route('profile');
-});
-
-// Route groups
-Route::prefix('admin')->group(function () {
-    Route::get('/dashboard', function () {
-        return 'Admin Dashboard';
-    });
-    Route::get('/profile', function () {
-        return 'Admin Profile';
-    });
-});
-
-// Rute dengan middleware
 Route::get('/dashboard', function () {
-    return 'Welcome to your dashboard!';
-})->middleware('auth');
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-// Resource route (rute suber daya)
-Route::resource('posts', 'PostController');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
+require __DIR__.'/auth.php';
