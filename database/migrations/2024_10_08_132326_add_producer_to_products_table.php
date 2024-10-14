@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            //
+            if (!Schema::hasColumn('products', 'producer')) {
+                $table->string('producer')->after('qty'); // Menambah kolom producer
+            }
         });
     }
 
@@ -22,7 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            //
+            if (Schema::hasColumn('products', 'producer')) {
+                $table->dropColumn('producer');
+            }
         });
     }
 };

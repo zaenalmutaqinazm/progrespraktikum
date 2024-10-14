@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\product;
 use Illuminate\Http\Request;
 use Pest\Arch\Options\LayerOptions;
 
@@ -18,12 +19,13 @@ class ProductController extends Controller
         ]);
     }
 
-    /**d
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
         //
+        return view("master-data.product-master.create-product");
     }
 
     /**
@@ -32,6 +34,24 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //
+        $validasi_data = $request->validate([
+            'product_name'=>'required|string|max:255',
+            'unit'=>'required|string|max:50',
+            'type'=>'required|string|max:50',
+            'information'=>'nullable|string|',
+            'qty'=>'required|integer',
+            'producer'=>'required|string|max:255',
+        ]);
+        
+        product::create($validasi_data);
+
+        return redirect()->back()->with('success', 'Product created succesfully!');
+        // try {
+        //     Product::create($validasi_data);
+        //     return redirect()->back()->with('success', 'Product created successfully!');
+        // } catch (\Exception $e) {
+        //     return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
+        // }
     }
 
     /**

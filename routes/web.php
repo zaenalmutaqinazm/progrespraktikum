@@ -8,7 +8,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/product/{id}', [ProductController::class, 'index']);
+// Route::get('/product/{id}', [ProductController::class, 'index']);
+Route::get('/product/create', [ProductController::class, 'create'])->name("product-create");
+Route::post('/product', [ProductController::class, 'store'])->name("product-store");
 
 Route::get('/dashboard', function () {
     return view('dashboard');

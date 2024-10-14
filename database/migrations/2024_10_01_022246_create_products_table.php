@@ -18,9 +18,11 @@ return new class extends Migration
             $table->string('product_name');
             $table->string('unit');
             $table->string('type');
-            $table->string('information');
-            $table->string('qty');
+            $table->string('information')->nullable();;
+            $table->integer('qty');
+            
             $table->timestamps();
+
         });
     }
 
