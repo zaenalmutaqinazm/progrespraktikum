@@ -33,9 +33,12 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('product-create')">
+                        {{-- <x-dropdown-link :href="route('product-create')">
                            Product Master
-                        </x-dropdown-link>
+                        </x-dropdown-link> --}}
+                        <x-dropdown-link :href="route('product-index')">
+                            Product Master
+                         </x-dropdown-link>
                         <x-dropdown-link :href="route('supplier-create')">
                             Supplier Master
                         </x-dropdown-link>
