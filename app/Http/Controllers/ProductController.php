@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\product;
 use Illuminate\Http\Request;
+use App\Exports\ProductsExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Pest\Arch\Options\LayerOptions;
 
 class ProductController extends Controller
@@ -11,6 +13,11 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function exportExcel()
+{
+    return Excel::download(new ProductsExport, 'products.xlsx');
+}
+
     public function index()
     {
         $data = Product::all();

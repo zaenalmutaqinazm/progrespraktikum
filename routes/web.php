@@ -9,6 +9,7 @@ use App\Http\Controllers\SupplierController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/products/export/excel', [ProductController::class, 'exportExcel'])->name('product-export-excel');
 
 Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
