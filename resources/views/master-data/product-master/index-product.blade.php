@@ -19,22 +19,30 @@
             </div>
         @endif
     
-      <a href="{{ route('product-create') }}">
-        <button class="px-6 py-4 text-white bg-green-500 border border-green-500 rounded-lg shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
-          Add product data
-        </button>
-      </a>
-      <a href="{{ route('product-export-excel') }}">
-        <button class="px-6 py-4 text-white bg-blue-500 border border-blue-500 rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-          Export to Excel
-        </button>
-      </a>
-    </div>
-      <a href="{{ route('product-export-pdf') }}">
-        <button class="px-6 py-4 text-white bg-red-500 border border-red-500 rounded-lg shadow-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
-            Export to PDF
-        </button>
-    </a>
+        <div class="flex space-x-6 mt-4">
+          <!-- Tombol Add Product -->
+          <a href="{{ route('product-create') }}">
+              <button class="px-6 py-3 text-white bg-green-500 border border-green-500 rounded-lg shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                  Add Product
+              </button>
+          </a>
+        </h2>
+          <!-- Tombol Export to Excel -->
+          <a href="{{ route('product-export-excel') }}">
+              <button class="px-6 py-3 text-white bg-blue-500 border border-blue-500 rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  Export to Excel
+              </button>
+          </a>
+        </h2>
+          <!-- Tombol Export to PDF -->
+          <a href="{{ route('product-export-pdf') }}">
+              <button class="px-6 py-3 text-white bg-red-500 border border-red-500 rounded-lg shadow-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                  Export to PDF
+              </button>
+          </a>
+      </div>
+      
+      
   
 
       <table class="min-w-full border border-collapse border-gray-200 mt-4">
@@ -51,8 +59,9 @@
           </tr>
         </thead>
         <tbody>
-          @foreach ($data as $item)
+          {{-- @foreach ($data as $item)
             <tr class="bg-white">
+              
               <td class="px-4 py-2 border border-gray-200">{{ $loop->iteration }}</td>
               <td class="px-4 py-2 border border-gray-200">{{ $item->product_name }}</td>
               <td class="px-4 py-2 border border-gray-200">{{ $item->unit }}</td>
@@ -69,7 +78,28 @@
         </tbody>
       </table>
     </div>
-  </div>
+  </div> --}}
+  @foreach ($data as $item)
+    <tr class="bg-white">
+        <td class="px-4 py-2 border border-gray-200">{{ $loop->iteration }}</td>
+        <!-- Nama Produk Dikaitkan dengan Rute Detail Produk -->
+        <td class="px-4 py-2 border border-gray-200">
+            <a href="{{ route('product-detail', $item->id) }}" class="text-blue-600 hover:text-blue-800">
+                {{ $item->product_name }}
+            </a>
+        </td>
+        <td class="px-4 py-2 border border-gray-200">{{ $item->unit }}</td>
+        <td class="px-4 py-2 border border-gray-200">{{ $item->type }}</td>
+        <td class="px-4 py-2 border border-gray-200">{{ $item->information }}</td>
+        <td class="px-4 py-2 border border-gray-200">{{ $item->qty }}</td>
+        <td class="px-4 py-2 border border-gray-200">{{ $item->producer }}</td>
+        <td class="px-4 py-2 border border-gray-200">
+            <a href="{{ route('product-edit', $item->id) }}" class="px-2 text-blue-600 hover:text-blue-800">Edit</a>
+            <button class="px-2 text-red-600 hover:text-red-800" onclick="confirmDelete('{{ route('product-delete', $item->id) }}')">Hapus</button>
+        </td>
+    </tr>
+@endforeach
+
 
   <script>
     function confirmDelete(deleteUrl) {

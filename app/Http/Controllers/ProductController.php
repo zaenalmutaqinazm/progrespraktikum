@@ -14,21 +14,21 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function exportExcel()
-{
-    return Excel::download(new ProductsExport, 'products.xlsx');
-}
+     public function exportExcel()
+    {
+        return Excel::download(new ProductsExport, 'products.xlsx');
+    }
+    
     public function exportToPdf()
-{
-    // Ambil semua data produk
-    $products = Product::all();
-
-    // Render ke template PDF
-    $pdf = Pdf::loadView('master-data.product-master.product-pdf', compact('products'));
-
-    // Download file PDF
-    return $pdf->download('products.pdf');
-}
+    {
+        // Ambil semua data produk
+        $products = Product::all();
+        // Render ke template PDF
+        $pdf = Pdf::loadView('master-data.product-master.product-pdf', compact('products'));
+    
+        // Download file PDF
+        return $pdf->download('products.pdf');
+    }
     public function index()
     {
         $data = Product::all();
@@ -75,7 +75,8 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+    return view('master-data.product-master.product-detail', compact('product'));
     }
 
     /**

@@ -13,7 +13,7 @@ Route::get('/products/export/excel', [ProductController::class, 'exportExcel'])-
 Route::get('/product/export-pdf', [ProductController::class, 'exportToPdf'])->name('product-export-pdf');
 
 Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-
+Route::get('/product-detail/{id}', [ProductController::class, 'show'])->name('product-detail');
 // Route::get('/product/{id}', [ProductController::class, 'index']);
 Route::get('/products', [ProductController::class, 'index'])->name('product-index');
 Route::get('/product/{id}/edit', [ProductController::class, 'edit'])->name('product-edit');
