@@ -30,6 +30,12 @@
         </button>
       </a>
     </div>
+      <a href="{{ route('product-export-pdf') }}">
+        <button class="px-6 py-4 text-white bg-red-500 border border-red-500 rounded-lg shadow-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+            Export to PDF
+        </button>
+    </a>
+  
 
       <table class="min-w-full border border-collapse border-gray-200 mt-4">
         <thead>

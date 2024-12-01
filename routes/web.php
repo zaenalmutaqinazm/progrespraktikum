@@ -10,6 +10,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/products/export/excel', [ProductController::class, 'exportExcel'])->name('product-export-excel');
+Route::get('/product/export-pdf', [ProductController::class, 'exportToPdf'])->name('product-export-pdf');
 
 Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 

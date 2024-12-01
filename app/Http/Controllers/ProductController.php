@@ -6,6 +6,7 @@ use App\Models\product;
 use Illuminate\Http\Request;
 use App\Exports\ProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Pest\Arch\Options\LayerOptions;
 
 class ProductController extends Controller
@@ -17,7 +18,17 @@ class ProductController extends Controller
 {
     return Excel::download(new ProductsExport, 'products.xlsx');
 }
+    public function exportToPdf()
+{
+    // Ambil semua data produk
+    $products = Product::all();
 
+    // Render ke template PDF
+    $pdf = Pdf::loadView('master-data.product-master.product-pdf', compact('products'));
+
+    // Download file PDF
+    return $pdf->download('products.pdf');
+}
     public function index()
     {
         $data = Product::all();
