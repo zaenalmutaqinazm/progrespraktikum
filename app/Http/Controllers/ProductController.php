@@ -7,13 +7,11 @@ use Illuminate\Http\Request;
 use App\Exports\ProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Supplier;
 use Pest\Arch\Options\LayerOptions;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
      public function exportExcel()
     {
         return Excel::download(new ProductsExport, 'products.xlsx');
@@ -32,7 +30,7 @@ class ProductController extends Controller
     public function index(request $request)
     {
         // Membuat query builder baru untuk model Product
-        $query = Product::query();
+        $query = Product::with('supplier'); 
 
         // Cek apakah ada parameter 'search' di request
         if ($request->has('search') && $request->search != '') {
@@ -54,8 +52,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
-        return view("master-data.product-master.create-product");
+        $suppliers = Supplier::all();
+        return view('master-data.product-master.create-product', compact('suppliers'));
     }
 
     /**
@@ -71,9 +69,10 @@ class ProductController extends Controller
             'information'=>'nullable|string|',
             'qty'=>'required|integer',
             'producer'=>'required|string|max:255',
+            'supplier_id' => 'required|exists:suppliers,id'
         ]);
         
-        product::create($validasi_data);
+        Product::create($validasi_data);
 
         return redirect()->back()->with('success', 'Product created succesfully!');
         // try {
@@ -99,7 +98,8 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         $product = Product::findOrFail($id);
-        return view("master-data.product-master.edit-product", compact('product'));
+        $suppliers = Supplier::all();
+        return view('master-data.product-master.edit-product', compact('product', 'suppliers'));
     }
 
     /**
@@ -114,6 +114,7 @@ class ProductController extends Controller
             'information' => 'nullable|string',
             'qty' => 'required|integer|min:1',
             'producer' => 'required|string|max:255',
+            'supplier_id' => 'nullable|exists:suppliers,id', 
         ]);
     
         // Mengupdate data produk
@@ -124,6 +125,7 @@ class ProductController extends Controller
         $product->information = $request->input('information');
         $product->qty = $request->input('qty');
         $product->producer = $request->input('producer');
+        $product->supplier_id = $request->input('supplier_id'); 
         
         $product->save();
         return redirect()->route('product-index')->with('success', 'Product updated successfully.');
