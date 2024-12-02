@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\product;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Exports\ProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -29,10 +29,24 @@ class ProductController extends Controller
         // Download file PDF
         return $pdf->download('products.pdf');
     }
-    public function index()
+    public function index(request $request)
     {
-        $data = Product::all();
-        return view('master-data.product-master.index-product', compact('data'));
+        // Membuat query builder baru untuk model Product
+        $query = Product::query();
+
+        // Cek apakah ada parameter 'search' di request
+        if ($request->has('search') && $request->search != '') {
+
+            // Melakukan pencarian berdasarkan nama produk atau informasi
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('product_name', 'like', '%' . $search . '%');
+            });
+        }
+
+        $products = $query->paginate(2);
+
+        return view('master-data.product-master.index-product', compact('products'));
     }
 
     /**
@@ -76,7 +90,7 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $product = Product::findOrFail($id);
-    return view('master-data.product-master.product-detail', compact('product'));
+     return view('master-data.product-master.product-detail', compact('product'));
     }
 
     /**

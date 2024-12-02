@@ -18,6 +18,12 @@
                 {{ session('error') }}
             </div>
         @endif
+
+        <form method="GET" action="{{ route('product-index') }}" class="mb-4 flex items-center">
+          <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari produk..." class="w-1/4 rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+          <button type="submit" class="ml-2 rounded-lg bg-green-500 px-4 py-2 text-white shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">Cari</button>
+          </form>
+          
     
         <div class="flex space-x-6 mt-4">
           <!-- Tombol Add Product -->
@@ -26,14 +32,14 @@
                   Add Product
               </button>
           </a>
-        </h2>
+      
           <!-- Tombol Export to Excel -->
           <a href="{{ route('product-export-excel') }}">
               <button class="px-6 py-3 text-white bg-blue-500 border border-blue-500 rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                   Export to Excel
               </button>
           </a>
-        </h2>
+      
           <!-- Tombol Export to PDF -->
           <a href="{{ route('product-export-pdf') }}">
               <button class="px-6 py-3 text-white bg-red-500 border border-red-500 rounded-lg shadow-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
@@ -59,47 +65,34 @@
           </tr>
         </thead>
         <tbody>
-          {{-- @foreach ($data as $item)
-            <tr class="bg-white">
-              
-              <td class="px-4 py-2 border border-gray-200">{{ $loop->iteration }}</td>
-              <td class="px-4 py-2 border border-gray-200">{{ $item->product_name }}</td>
-              <td class="px-4 py-2 border border-gray-200">{{ $item->unit }}</td>
-              <td class="px-4 py-2 border border-gray-200">{{ $item->type }}</td>
-              <td class="px-4 py-2 border border-gray-200">{{ $item->information }}</td>
-              <td class="px-4 py-2 border border-gray-200">{{ $item->qty }}</td>
-              <td class="px-4 py-2 border border-gray-200">{{ $item->producer }}</td>
-              <td class="px-4 py-2 border border-gray-200">
-                <a href="{{ route('product-edit', $item->id) }}" class="px-2 text-blue-600 hover:text-blue-800">Edit</a>
-                <button class="px-2 text-red-600 hover:text-red-800" onclick="confirmDelete('{{  route('product-delete', $item->id) }}')">Hapus</button>
-              </td>
-            </tr>
-          @endforeach
-        </tbody>
-      </table>
-    </div>
-  </div> --}}
-  @foreach ($data as $item)
+
+  @forelse ($products as $product)
     <tr class="bg-white">
         <td class="px-4 py-2 border border-gray-200">{{ $loop->iteration }}</td>
         <!-- Nama Produk Dikaitkan dengan Rute Detail Produk -->
         <td class="px-4 py-2 border border-gray-200">
-            <a href="{{ route('product-detail', $item->id) }}" class="text-blue-600 hover:text-blue-800">
-                {{ $item->product_name }}
+            <a href="{{ route('product-detail', $product->id) }}" class="text-blue-600 hover:text-blue-800">
+                {{ $product->product_name }}
             </a>
         </td>
-        <td class="px-4 py-2 border border-gray-200">{{ $item->unit }}</td>
-        <td class="px-4 py-2 border border-gray-200">{{ $item->type }}</td>
-        <td class="px-4 py-2 border border-gray-200">{{ $item->information }}</td>
-        <td class="px-4 py-2 border border-gray-200">{{ $item->qty }}</td>
-        <td class="px-4 py-2 border border-gray-200">{{ $item->producer }}</td>
+        <td class="px-4 py-2 border border-gray-200">{{ $product->unit }}</td>
+        <td class="px-4 py-2 border border-gray-200">{{ $product->type }}</td>
+        <td class="px-4 py-2 border border-gray-200">{{ $product->information }}</td>
+        <td class="px-4 py-2 border border-gray-200">{{ $product->qty }}</td>
+        <td class="px-4 py-2 border border-gray-200">{{ $product->producer }}</td>
         <td class="px-4 py-2 border border-gray-200">
-            <a href="{{ route('product-edit', $item->id) }}" class="px-2 text-blue-600 hover:text-blue-800">Edit</a>
-            <button class="px-2 text-red-600 hover:text-red-800" onclick="confirmDelete('{{ route('product-delete', $item->id) }}')">Hapus</button>
+            <a href="{{ route('product-edit', $product->id) }}" class="px-2 text-blue-600 hover:text-blue-800">Edit</a>
+            <button class="px-2 text-red-600 hover:text-red-800" onclick="confirmDelete('{{ route('product-delete', $product->id) }}')">Hapus</button>
         </td>
     </tr>
-@endforeach
-
+    @empty
+    <p class="mb-4 text-center text-2xl font-bold text-red-600">no product found</p>
+@endforelse
+  </table>
+  <div class="mt-4">
+      {{ $products->appends(['search' => request('search')])->links() }}
+  </div>
+</div>
 
   <script>
     function confirmDelete(deleteUrl) {
